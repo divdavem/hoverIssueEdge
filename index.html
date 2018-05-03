@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Hover issue</title>
+    <style>
+        #myButton {
+            position: absolute;
+            top: 200px;
+        }
+        #myButton:hover {
+            background-color: blue;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>Hover issue on Edge browser</h1>
+    <p>This sample page shows an issue with Microsoft Edge: the <code>:hover</code> state stays applied even when the mouse is no longer on the button (tested with Microsoft Edge 40.15063.674.0, Microsoft EdgeHTML 15.15063).</p>
+    <p>To reproduce the issue: move the mouse from the button to the top. The tooltip (which was displayed in the <code>mouseenter</code> event of the button) is removed from the DOM in the <code>mouseleave</code> event of the button. The button stays blue whereas the <code>:hover</code> state should no longer be applied.</p>
+    <button id="myButton">Button with tooltip</button>
+    <script>
+        (function () {
+            var myButton = document.getElementById("myButton");
+            var tooltip = null;
+
+            function showTooltip() {
+                if (!tooltip) {
+                    tooltip = document.createElement("div");
+                    tooltip.style.cssText = "position:absolute;background-color:yellow;border:1px solid black;left:10px;top:150px;height:50px;width:150px;";
+                    document.body.appendChild(tooltip);
+                }
+            }
+            function hideTooltip() {
+                if (tooltip) {
+                    tooltip.parentElement.removeChild(tooltip);
+                    tooltip = null;
+                }
+            }
+
+            myButton.addEventListener("mouseenter", showTooltip);
+            myButton.addEventListener("mouseleave", hideTooltip);
+        })();
+    </script>
+</body>
+</html>
